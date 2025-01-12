@@ -73,7 +73,8 @@ disp(['Fonksiyon sonucu (f): ', num2str(f)]);
 ---
 Aşağıda, fonksiyonun girdilerine dayalı sırasıyla  ivme ve hız talebi grafiklerinin  görselleri bulunmaktadır.
 ![image](https://github.com/user-attachments/assets/1561fc87-e77f-4788-b222-12a4517f169c)
-![image](https://github.com/user-attachments/assets/d9c311ca-87a9-4972-b3b9-70fa5117dd50)
+![image](https://github.com/user-attachments/assets/db44d09d-727f-4130-b981-e1e5175803e2)
+
 
 
 
