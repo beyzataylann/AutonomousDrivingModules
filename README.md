@@ -1,5 +1,6 @@
 
 Bu proje, araçların hız ve mesafe farklarını analiz ederek trafik akışını modellemek için bir MATLAB fonksiyonu içerir. fcn.m, araçlar arası güvenli takip mesafesi ve hızlanma-yavaşlama oranlarını hesaplar. Bu model, adaptif cruise kontrolü (ACC) simülasyonu için de uygundur. Adaptif cruise kontrol, takip aracının hızını, önündeki araçla arasındaki mesafeye göre otomatik olarak ayarlayarak güvenli mesafe korunmasını sağlar. Bu sistem, yoğun trafik koşullarında hızlanma ve yavaşlama dinamiklerini optimize eder.
+
 ---
 
 ## Nasıl Çalışır?
