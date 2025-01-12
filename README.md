@@ -1,7 +1,8 @@
 
+
 # Trafik Dinamikleri Hesaplama: fcn.m
 
-Bu proje, araçlar arasındaki hız ve mesafe farklarını analiz ederek trafik akışını modellemek için bir MATLAB fonksiyonu içerir. **fcn.m**, araçlar arası güvenli takip mesafesi ve hızlanma-yavaşlama oranlarını hesaplar.
+Bu proje, araçların hız ve mesafe farklarını analiz ederek trafik akışını modellemek için bir MATLAB fonksiyonu içerir. **fcn.m**, araçlar arası güvenli takip mesafesi ve hızlanma-yavaşlama oranlarını hesaplar.
 
 ---
 
@@ -25,54 +26,32 @@ Fonksiyon iki duruma göre çalışır:
 1. **Serbest Akış Durumu:** Araçlar arasında yeterli mesafe varsa, araç hızlanma eğilimindedir.
 2. **Yoğun Akış Durumu:** Araçlar birbirine yakınsa, takip eden araç yavaşlama eğilimindedir.
 
-### Formüller:
+### Adım Adım Hesaplamalar:
 
 1. **Güvenli Takip Mesafesi:**
-   Güvenli takip mesafesi şu şekilde hesaplanır:
-   $$
-   \[
-   s_1 = s_0 + \max(0, Ve \cdot T + \frac{Ve \cdot (Ve - Vl)}{2 \cdot \sqrt{a \cdot b}})
-   \]
-   $$
-   Burada:
-   - \( s_0 \): Minimum güvenli mesafe (örneğin, 2 metre),
-   - \( Ve \): Öncü aracın hızı,
-   - \( Vl \): Takip eden aracın hızı,
-   - \( T \): Tepki süresi (örneğin, 1.5 saniye),
-   - \( a, b \): Hızlanma ve yavaşlama katsayılarıdır.
+   Güvenli takip mesafesi şu şekilde belirlenir:
+   - Minimum güvenli mesafe, \( s_0 \), örneğin 2 metre olarak sabit bir değer alır.
+   - Öncü aracın hızı \( Ve \) ve takip eden aracın hızı \( Vl \) kullanılarak, bir takip mesafesi \( T \) (örneğin 1.5 saniye) kadar dikkate alınır.
+   - Araçların hız farkı ve tepki süresine göre ek bir mesafe hesaplanır.
 
-3. **Z Oranı:**
-   Güvenli mesafenin gerçek mesafeye oranı:
-   \[
-   z = \frac{s_1}{s}
-   \]
+   Sonuç olarak, toplam güvenli takip mesafesi:
+   - \( s_1 = s_0 + \) takip mesafesi + hız farkına bağlı ek mesafe.
 
-4. **Hızlanma ve Yavaşlama Dinamikleri:**
-   - **Serbest Akış (Ve ≤ Vcr):**
-     \[
-     a_{\text{free}} = a \cdot \left(1 - \left(\frac{Ve}{Vcr}\right)^\delta\right)
-     \]
-     Eğer \( z \geq 1 \):
-     \[
-     h = a \cdot (1 - z^2)
-     \]
-     Eğer \( z < 1 \):
-     \[
-     h = a_{\text{free}} \cdot \left(1 - z^{2a/a_{\text{free}}}\right)
-     \]
+2. **Z Oranı:**
+   Güvenli mesafenin gerçek mesafeye oranı hesaplanır:
+   - \( z = s_1 / s \), burada \( s \) araçlar arasındaki mevcut mesafedir.
 
-   - **Yoğun Akış (Ve > Vcr):**
-     \[
-     a_{\text{free}} = -b \cdot \left(1 - \left(\frac{Vcr}{Ve}\right)^{a \cdot \delta / b}\right)
-     \]
-     Eğer \( z \geq 1 \):
-     \[
-     h = a_{\text{free}} + a \cdot (1 - z^2)
-     \]
-     Eğer \( z < 1 \):
-     \[
-     h = a_{\text{free}}
-     \]
+3. **Hızlanma ve Yavaşlama Dinamikleri:**
+
+   a. **Serbest Akış Durumu (Öncü hız \( Ve \), kritik hızdan küçük veya eşit):**
+      - Araç hızlanmaya devam eder. Hızlanma katsayısı \( a \), araç hızının kritik hıza oranına bağlı olarak belirlenir.
+      - Eğer güvenli mesafe korunuyorsa (\( z < 1 \)), hızlanma dinamiği yavaş yavaş azalır.
+      - Güvenli mesafe korunmuyorsa (\( z \geq 1 \)), araç fren yapar ve yavaşlar.
+
+   b. **Yoğun Akış Durumu (Öncü hız \( Ve \), kritik hızdan büyük):**
+      - Araçlar birbirine daha yakın hareket eder. Hızlanma katsayısı, kritik hızın öncü araca oranına bağlıdır.
+      - Eğer güvenli mesafe korunuyorsa (\( z < 1 \)), araç hızı sabit tutulur.
+      - Güvenli mesafe korunmuyorsa (\( z \geq 1 \)), fren etkisi hızlanma dinamiğini baskılar.
 
 ---
 
@@ -96,10 +75,10 @@ disp(['Fonksiyon sonucu (f): ', num2str(f)]);
 
 ---
 
-## Bu Projeyi Neden Yaptım?
+## Özet
 
-Bu proje, trafik mühendisliği ve araç takip dinamiklerini anlamak için yazılmıştır. Özellikle mühendislik derslerinde veya trafik simülasyonlarında kullanılabilir.
+Bu proje, trafik mühendisliği ve araç takip dinamiklerini anlamak için yazılmıştır. Özellikle mühendislik derslerinde veya trafik simülasyonlarında kullanılabilir. Daha fazla katkıda bulunmak isterseniz, bana ulaşabilirsiniz.
 
 ---
 
-Bu haliyle daha sade, anlaşılır ve kullanıcı dostu bir açıklama sunar. Ayrıca formüller daha temiz ve okunaklı bir şekilde yazılmıştır.
+Bu şekilde formülleri açıkça metin içinde ifade ediyoruz, ancak karmaşık semboller olmadan anlatımı daha kullanıcı dostu hale getiriyoruz.
