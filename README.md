@@ -1,7 +1,5 @@
-# Trafik Dinamikleri Hesaplama: fcn.m
 
-Bu proje, araçların hız ve mesafe farklarını analiz ederek trafik akışını modellemek için bir MATLAB fonksiyonu içerir. **fcn.m**, araçlar arası güvenli takip mesafesi ve hızlanma-yavaşlama oranlarını hesaplar.
-
+Bu proje, araçların hız ve mesafe farklarını analiz ederek trafik akışını modellemek için bir MATLAB fonksiyonu içerir. fcn.m, araçlar arası güvenli takip mesafesi ve hızlanma-yavaşlama oranlarını hesaplar. Bu model, adaptif cruise kontrolü (ACC) simülasyonu için de uygundur. Adaptif cruise kontrol, takip aracının hızını, önündeki araçla arasındaki mesafeye göre otomatik olarak ayarlayarak güvenli mesafe korunmasını sağlar. Bu sistem, yoğun trafik koşullarında hızlanma ve yavaşlama dinamiklerini optimize eder.
 ---
 
 ## Nasıl Çalışır?
@@ -72,8 +70,9 @@ disp(['Fonksiyon sonucu (f): ', num2str(f)]);
 ```
 
 ---
+Aşağıda, fonksiyonun girdilerine dayalı sırasıyla  ivme ve hız talebi grafiklerinin  görselleri bulunmaktadır.
+![image](https://github.com/user-attachments/assets/1561fc87-e77f-4788-b222-12a4517f169c)
+![image](https://github.com/user-attachments/assets/d9c311ca-87a9-4972-b3b9-70fa5117dd50)
 
-## Özet
 
-Bu proje, trafik mühendisliği ve araç takip dinamiklerini anlamak için yazılmıştır. Özellikle mühendislik derslerinde veya trafik simülasyonlarında kullanılabilir. Daha fazla katkıda bulunmak isterseniz, bana ulaşabilirsiniz.
 
