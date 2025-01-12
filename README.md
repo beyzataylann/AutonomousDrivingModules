@@ -1,139 +1,105 @@
 
-
 # Trafik Dinamikleri Hesaplama: fcn.m
 
-Bu proje, araçların hız ve mesafe dinamiklerini analiz etmek için bir MATLAB fonksiyonu içerir. **fcn.m** dosyası, verilen hız ve mesafe değerleriyle araçların hızlanma veya yavaşlama oranını hesaplar.
+Bu proje, araçlar arasındaki hız ve mesafe farklarını analiz ederek trafik akışını modellemek için bir MATLAB fonksiyonu içerir. **fcn.m**, araçlar arası güvenli takip mesafesi ve hızlanma-yavaşlama oranlarını hesaplar.
 
 ---
 
 ## Nasıl Çalışır?
 
-Fonksiyon, araçlar arasındaki mesafeyi ve hız farklarını dikkate alarak trafik akışını simüle eder. İki temel durum üzerinden çalışır:
+### Girişler:
+- **u (Öncü aracın hızı):** Öncü aracın hızını ifade eder.
+- **v (Takip eden aracın hızı):** Takip eden aracın hızını ifade eder.
+- **d (Araçlar arasındaki mesafe):** Araçlar arasındaki gerçek mesafeyi ifade eder.
 
-1. **Serbest Akış (Free Flow):** Araçlar arasında yeterli mesafe olduğunda.
-2. **Yoğun Akış (Congested Flow):** Araçlar birbirine çok yakın olduğunda.
-
----
-
-## Matematiksel Model
-
-### Mesafe ve Güvenli Takip
-
-Araçlar arasındaki güvenli takip mesafesi \( s_1 \), aşağıdaki formülle hesaplanır:
-
-\[
-s_1 = s_0 + \max(0, V_e \cdot T + \frac{V_e \cdot (V_e - V_l)}{2 \sqrt{a \cdot b}})
-\]
-
-Burada:
-- \( s_0 \): Minimum güvenli mesafe (varsayılan 2 metre),
-- \( V_e \): Öncü aracın hızı,
-- \( V_l \): Takip eden aracın hızı,
-- \( T \): Tepki süresi (varsayılan 1.5 saniye),
-- \( a \) ve \( b \): Hızlanma ve yavaşlama katsayıları.
-
-Daha sonra, \( z \) oranı hesaplanır:
-
-\[
-z = \frac{s_1}{s}
-\]
-
-Burada \( s \), gerçek mesafedir.
+### Çıktılar:
+- **h:** Araçların hız değişim oranı.
+- **f:** Aynı hız değişim oranını tekrar eder (ileride geliştirme için).
 
 ---
 
-### Hızlanma ve Yavaşlama Dinamikleri
+## Hesaplamalar
 
-#### Serbest Akış Durumu (\( V_e \leq V_{cr} \)):
+Fonksiyon iki duruma göre çalışır:
 
-Hızlanma katsayısı \( a_{\text{free}} \), şu şekilde hesaplanır:
+1. **Serbest Akış Durumu:** Araçlar arasında yeterli mesafe varsa, araç hızlanma eğilimindedir.
+2. **Yoğun Akış Durumu:** Araçlar birbirine yakınsa, takip eden araç yavaşlama eğilimindedir.
 
-\[
-a_{\text{free}} = a \cdot \left(1 - \left(\frac{V_e}{V_{cr}}\right)^\delta\right)
-\]
+### Formüller:
 
-Eğer \( z \geq 1 \) ise:
+1. **Güvenli Takip Mesafesi:**
+   Güvenli takip mesafesi şu şekilde hesaplanır:
+   $$
+   \[
+   s_1 = s_0 + \max(0, Ve \cdot T + \frac{Ve \cdot (Ve - Vl)}{2 \cdot \sqrt{a \cdot b}})
+   \]
+   $$
+   Burada:
+   - \( s_0 \): Minimum güvenli mesafe (örneğin, 2 metre),
+   - \( Ve \): Öncü aracın hızı,
+   - \( Vl \): Takip eden aracın hızı,
+   - \( T \): Tepki süresi (örneğin, 1.5 saniye),
+   - \( a, b \): Hızlanma ve yavaşlama katsayılarıdır.
 
-\[
-\text{Türev Sonucu: } h = a \cdot \left(1 - z^2\right)
-\]
+3. **Z Oranı:**
+   Güvenli mesafenin gerçek mesafeye oranı:
+   \[
+   z = \frac{s_1}{s}
+   \]
 
-Eğer \( z < 1 \) ise:
+4. **Hızlanma ve Yavaşlama Dinamikleri:**
+   - **Serbest Akış (Ve ≤ Vcr):**
+     \[
+     a_{\text{free}} = a \cdot \left(1 - \left(\frac{Ve}{Vcr}\right)^\delta\right)
+     \]
+     Eğer \( z \geq 1 \):
+     \[
+     h = a \cdot (1 - z^2)
+     \]
+     Eğer \( z < 1 \):
+     \[
+     h = a_{\text{free}} \cdot \left(1 - z^{2a/a_{\text{free}}}\right)
+     \]
 
-\[
-\text{Türev Sonucu: } h = a_{\text{free}} \cdot \left(1 - z^{\frac{2a}{a_{\text{free}}}}\right)
-\]
-
-#### Yoğun Akış Durumu (\( V_e > V_{cr} \)):
-
-Hızlanma katsayısı şu şekilde hesaplanır:
-
-\[
-a_{\text{free}} = -b \cdot \left(1 - \left(\frac{V_{cr}}{V_e}\right)^{\frac{a \cdot \delta}{b}}\right)
-\]
-
-Eğer \( z \geq 1 \) ise:
-
-\[
-\text{Türev Sonucu: } h = a_{\text{free}} + a \cdot \left(1 - z^2\right)
-\]
-
-Eğer \( z < 1 \) ise:
-
-\[
-\text{Türev Sonucu: } h = a_{\text{free}}
-\]
+   - **Yoğun Akış (Ve > Vcr):**
+     \[
+     a_{\text{free}} = -b \cdot \left(1 - \left(\frac{Vcr}{Ve}\right)^{a \cdot \delta / b}\right)
+     \]
+     Eğer \( z \geq 1 \):
+     \[
+     h = a_{\text{free}} + a \cdot (1 - z^2)
+     \]
+     Eğer \( z < 1 \):
+     \[
+     h = a_{\text{free}}
+     \]
 
 ---
 
-## Fonksiyon Kullanımı
+## MATLAB'da Kullanımı
 
-Aşağıdaki kodu MATLAB ya da Octave'da çalıştırabilirsiniz:
+Aşağıdaki örnekle fonksiyonu test edebilirsiniz:
 
 ```matlab
-% Örnek giriş değerleri
-u = 20; % Öncü aracın hızı
-v = 15; % Takip eden aracın hızı
-d = 10; % Araçlar arasındaki mesafe
+% Giriş değerleri
+u = 20; % Öncü aracın hızı (m/s)
+v = 15; % Takip eden aracın hızı (m/s)
+d = 10; % Araçlar arasındaki mesafe (m)
 
-% Fonksiyonu çağır
+% Fonksiyonu çalıştır
 [h, f] = fcn(u, v, d);
 
-% Sonuçları yazdır
-disp(['Hız değişim oranı: ', num2str(h)]);
-disp(['Fonksiyon sonucu: ', num2str(f)]);
-```
-
----
-
-## Grafikler
-
-Fonksiyonun çıktısını grafiklerle görselleştirmek mümkündür. Örneğin, farklı hız ve mesafe değerlerine göre türev sonuçlarını çizdirebilirsiniz:
-
-```matlab
-u_vals = 10:5:30; % Öncü hızları
-v_vals = 5:5:25;  % Takip eden hızlar
-d_vals = 5:2:20;  % Mesafeler
-
-% Türev sonuçlarını hesaplayıp grafiğe dökebilirsiniz.
-% Örneğin, u ile h arasındaki ilişki:
-plot(u_vals, arrayfun(@(u) fcn(u, 15, 10), u_vals));
-xlabel('Öncü Hızı (m/s)');
-ylabel('Türev Sonucu h');
-title('Öncü Hızı ile Türev Sonucu Arasındaki İlişki');
+% Sonuçları görüntüle
+disp(['Hız değişim oranı (h): ', num2str(h)]);
+disp(['Fonksiyon sonucu (f): ', num2str(f)]);
 ```
 
 ---
 
 ## Bu Projeyi Neden Yaptım?
 
-Trafik dinamiklerini anlamak ve araçların birbirine göre nasıl hareket ettiğini görmek için bu fonksiyonu yazdım. Özellikle mühendislik derslerinde veya projelerinde faydalı olabilir.
+Bu proje, trafik mühendisliği ve araç takip dinamiklerini anlamak için yazılmıştır. Özellikle mühendislik derslerinde veya trafik simülasyonlarında kullanılabilir.
 
 ---
 
-## Katkıda Bulunun
-
-Hata bulduğunuzda ya da geliştirme önerileriniz varsa, lütfen bana ulaşın veya bir **issue** açın. Katkıda bulunmak isterseniz, **pull request** gönderebilirsiniz.
-
---- 
-
+Bu haliyle daha sade, anlaşılır ve kullanıcı dostu bir açıklama sunar. Ayrıca formüller daha temiz ve okunaklı bir şekilde yazılmıştır.
