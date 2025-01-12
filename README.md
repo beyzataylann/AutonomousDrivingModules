@@ -1,5 +1,3 @@
-
-
 # Trafik Dinamikleri Hesaplama: fcn.m
 
 Bu proje, araçların hız ve mesafe farklarını analiz ederek trafik akışını modellemek için bir MATLAB fonksiyonu içerir. **fcn.m**, araçlar arası güvenli takip mesafesi ve hızlanma-yavaşlama oranlarını hesaplar.
@@ -46,12 +44,12 @@ Fonksiyon iki duruma göre çalışır:
    a. **Serbest Akış Durumu (Öncü hız \( Ve \), kritik hızdan küçük veya eşit):**
       - Araç hızlanmaya devam eder. Hızlanma katsayısı \( a \), araç hızının kritik hıza oranına bağlı olarak belirlenir.
       - Eğer güvenli mesafe korunuyorsa (\( z < 1 \)), hızlanma dinamiği yavaş yavaş azalır.
-      - Güvenli mesafe korunmuyorsa (\( z \geq 1 \)), araç fren yapar ve yavaşlar.
+      - Güvenli mesafe korunmuyorsa (\( z >= 1 \)), araç fren yapar ve yavaşlar.
 
    b. **Yoğun Akış Durumu (Öncü hız \( Ve \), kritik hızdan büyük):**
       - Araçlar birbirine daha yakın hareket eder. Hızlanma katsayısı, kritik hızın öncü araca oranına bağlıdır.
       - Eğer güvenli mesafe korunuyorsa (\( z < 1 \)), araç hızı sabit tutulur.
-      - Güvenli mesafe korunmuyorsa (\( z \geq 1 \)), fren etkisi hızlanma dinamiğini baskılar.
+      - Güvenli mesafe korunmuyorsa (\( z >= 1 \)), fren etkisi hızlanma dinamiğini baskılar.
 
 ---
 
@@ -79,6 +77,3 @@ disp(['Fonksiyon sonucu (f): ', num2str(f)]);
 
 Bu proje, trafik mühendisliği ve araç takip dinamiklerini anlamak için yazılmıştır. Özellikle mühendislik derslerinde veya trafik simülasyonlarında kullanılabilir. Daha fazla katkıda bulunmak isterseniz, bana ulaşabilirsiniz.
 
----
-
-Bu şekilde formülleri açıkça metin içinde ifade ediyoruz, ancak karmaşık semboller olmadan anlatımı daha kullanıcı dostu hale getiriyoruz.
