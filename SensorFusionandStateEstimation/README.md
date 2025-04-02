@@ -35,7 +35,7 @@ Bu proje, Kalman Filtresi kullanarak GPS ve IMU verilerini birleştirerek konum 
 ## Çıktılar
 Kod çalıştırıldığında aşağıdaki  grafik üretilir:
 
-![sensorfusion](https://github.com/user-attachments/assets/7b9eeeb1-565c-430a-84fa-1cc89b0f6e7d)
+![sensorfusion](https://github.com/user-attachments/assets/c0317106-0e35-431a-bb3a-e1c5ae019690)
 
 
 
